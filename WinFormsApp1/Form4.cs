@@ -122,7 +122,30 @@ namespace WinFormsApp1
             labelnyawaboss.AutoSize = true;
             this.Controls.Add(labelnyawaboss);
 
-            
+            //Bagian Dynamic Component bawah
+            namacharaktif = new Label();
+            namacharaktif.Text = charAktif.name;
+            namacharaktif.ForeColor = Color.White;
+            namacharaktif.Font = new Font("Segoe UI", 14, FontStyle.Bold);
+            namacharaktif.Location = new Point(590, 598);
+            namacharaktif.AutoSize = true;
+            this.Controls.Add(namacharaktif);
+
+            healthbarcharaktif = new ProgressBar();
+            healthbarcharaktif.Maximum = charAktif.MaxHP;
+            healthbarcharaktif.Value = charAktif.CurrentHP;
+            healthbarcharaktif.Minimum = 0;
+            healthbarcharaktif.Location = new Point(402, 632);
+            healthbarcharaktif.Size = new Size(465, 17);
+            this.Controls.Add(healthbarcharaktif);
+
+            lblHpCharAktif = new Label();
+            lblHpCharAktif.ForeColor = Color.White;
+            lblHpCharAktif.Text = $"{charAktif.CurrentHP}/{charAktif.MaxHP}";
+            lblHpCharAktif.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            lblHpCharAktif.Location = new Point(780, 598);
+            lblHpCharAktif.AutoSize = true;
+            this.Controls.Add(lblHpCharAktif);
 
         }
 
