@@ -187,6 +187,10 @@ namespace WinFormsApp1
             this.Controls.Add(labelcdgantichar);
 
         }
+        private void lblHpMusuhAktif_TextUpdate()
+        {
+            labelnyawaboss.Text = $"{healthbarboss.Value} / {bossaktif.MaxHPmusuh}";
+        }
         private void lblHpHpCharAktif_TextUpdate()
         {
             lblHpCharAktif.Text = $"{charAktif.CurrentHP} / {charAktif.MaxHP}";
@@ -256,7 +260,7 @@ namespace WinFormsApp1
         private void buttonbasicatk_Click(object sender, EventArgs e)
         {
             healthbarboss.Value -= charAktif.BaseATK;
-            labelnyawaboss.Text = $"{healthbarboss.Value}/{bossaktif.MaxHPmusuh}";
+            lblHpMusuhAktif_TextUpdate();
         }
 
         private void timercdgantichar_Tick(object sender, EventArgs e)
@@ -290,6 +294,7 @@ namespace WinFormsApp1
                 healthbarboss.Value -= charAktif.skilldmg;
             }
             UpdateSkillButtonUI();
+            lblHpMusuhAktif_TextUpdate();
         }
 
         private void timercdskillorulti_Tick(object sender, EventArgs e)
@@ -302,10 +307,13 @@ namespace WinFormsApp1
                     c.currentskillcd--;
                     adaYangMasihCD = true;
                 }
-                if(c.currentulticd> 0)
+            }
+            foreach (Character c in partyterpilih)
+            {
+                if (c.currentulticd > 0)
                 {
                     c.currentulticd--;
-                    adaYangMasihCD = false;
+                    adaYangMasihCD = true;
                 }
             }
             UpdateSkillButtonUI();
@@ -331,6 +339,7 @@ namespace WinFormsApp1
                 healthbarboss.Value -= charAktif.ultidmg;
             }
             UpdateUltiButtonUI();
+            lblHpMusuhAktif_TextUpdate();
         }
     }
 }
