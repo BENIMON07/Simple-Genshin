@@ -10,6 +10,10 @@ namespace WinFormsApp1
 {
     public partial class Form4 : Form
     {
+        int cdGantiChar = 0;
+        int cdskill = 0;
+        int cdulti = 0;
+        Label labelcdgantichar;
         BindingList<Musuh> listmusuh = new BindingList<Musuh>();
         BindingList<Character> partyterpilih = new BindingList<Character>();
         Musuh bossaktif;
@@ -28,7 +32,7 @@ namespace WinFormsApp1
         BindingList<PictureBox> listfotocharkanan = new BindingList<PictureBox>();
         BindingList<Label> listlabelnamacharkanan = new BindingList<Label>();
 
-        public Form4(BindingList<Character>partyteam,int index)
+        public Form4(BindingList<Character> partyteam, int index)
         {
             InitializeComponent();
             this.partyterpilih = partyteam;
@@ -116,7 +120,7 @@ namespace WinFormsApp1
 
             labelnyawaboss = new Label();
             labelnyawaboss.ForeColor = Color.White;
-            labelnyawaboss.Text = $"{bossaktif.CurrentHPmusuh}/{bossaktif.MaxHPmusuh}";
+            labelnyawaboss.Text = $"{healthbarboss.Value}/{bossaktif.MaxHPmusuh}";
             labelnyawaboss.Font = new Font("Segoe UI", 13, FontStyle.Bold);
             labelnyawaboss.Location = new Point(770, 80);
             labelnyawaboss.AutoSize = true;
@@ -149,7 +153,7 @@ namespace WinFormsApp1
 
             //pilihan char di kanan
             int startY = 80;
-            for(int i=0; i<partyterpilih.Count; i++)
+            for (int i = 0; i < partyterpilih.Count; i++)
             {
                 Character c = partyterpilih[i];
                 Label lbparty = new Label();
@@ -163,18 +167,170 @@ namespace WinFormsApp1
 
                 PictureBox fotoparty = new PictureBox();
                 fotoparty.Size = new Size(50, 50);
+                fotoparty.BackColor = Color.White;
                 fotoparty.Location = new Point(1180, startY + (i * 60));
                 fotoparty.SizeMode = PictureBoxSizeMode.Zoom;
                 fotoparty.Image = c.Avatar;
                 fotoparty.Tag = c;
                 fotoparty.Cursor = Cursors.Hand;
 
-
+                fotoparty.Click += fotoparty_Click;
                 this.Controls.Add(fotoparty);
                 listfotocharkanan.Add(fotoparty);
             }
+            labelcdgantichar = new Label();
+            labelcdgantichar.Text = $"CD: {cdGantiChar}";
+            labelcdgantichar.Location = new Point(1146, 20);
+            labelcdgantichar.ForeColor = Color.White;
+            labelcdgantichar.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            labelcdgantichar.Visible = false;
+            this.Controls.Add(labelcdgantichar);
 
         }
+        private void lblHpHpCharAktif_TextUpdate()
+        {
+            lblHpCharAktif.Text = $"{charAktif.CurrentHP} / {charAktif.MaxHP}";
+        }
+        private void fotoparty_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)sender;
+            Character charDipilih = (Character)pb.Tag;
 
+            if (cdGantiChar > 0)
+            {
+                return;
+            }
+            if (charDipilih != charAktif && charDipilih.CurrentHP > 0)
+            {
+                charAktif = charDipilih;
+                UpdateCharAktifUI();
+                cdGantiChar = 2;
+                labelcdgantichar.Visible = true;
+                labelcdgantichar.Text = $"CD: {cdGantiChar}";
+                timercdgantichar.Start();
+            }
+
+        }
+        private void UpdateCharAktifUI()
+        {
+            if (charAktif == null) return;
+            namacharaktif.Text = charAktif.name;
+            healthbarcharaktif.Maximum = charAktif.MaxHP;
+            int hpTampil = Math.Max(0, charAktif.CurrentHP);
+            healthbarcharaktif.Value = hpTampil;
+            lblHpCharAktif.Text = $"{hpTampil} / {charAktif.MaxHP}";
+            UpdateSkillButtonUI();
+            UpdateUltiButtonUI();
+        }
+        private void UpdateSkillButtonUI()
+        {
+            if (charAktif == null) return;
+
+            if (charAktif.currentskillcd > 0)
+            {
+                buttonskill.Text = $"Skill\n{charAktif.currentskillcd}s";
+                buttonskill.Enabled = false;
+            }
+            else
+            {
+                buttonskill.Text = "Skill";
+                buttonskill.Enabled = true;
+            }
+        }
+        private void UpdateUltiButtonUI()
+        {
+            if (charAktif == null) return;
+
+            if (charAktif.currentulticd > 0)
+            {
+                buttonulti.Text = $"Ulti\n{charAktif.currentulticd}s";
+                buttonulti.Enabled = false;
+            }
+            else
+            {
+                buttonulti.Text = "Ulti";
+                buttonulti.Enabled = true;
+            }
+        }
+
+        private void buttonbasicatk_Click(object sender, EventArgs e)
+        {
+            healthbarboss.Value -= charAktif.BaseATK;
+            labelnyawaboss.Text = $"{healthbarboss.Value}/{bossaktif.MaxHPmusuh}";
+        }
+
+        private void timercdgantichar_Tick(object sender, EventArgs e)
+        {
+
+            if (cdGantiChar > 0)
+            {
+                cdGantiChar--;
+                labelcdgantichar.Text = $"CD: {cdGantiChar}";
+
+            }
+            if (cdGantiChar == 0)
+            {
+                labelcdgantichar.Visible = false;
+                timercdgantichar.Stop();
+            }
+        }
+
+        private void buttonskill_Click(object sender, EventArgs e)
+        {
+            if (charAktif.currentskillcd > 0)
+            {
+                return;
+            }
+            charAktif.currentskillcd = charAktif.skillcd;
+            buttonskill.Text = $"Skill \n {cdskill}";
+            timercdskillorulti.Start();
+
+            if (charAktif.role == "Main DPS")
+            {
+                healthbarboss.Value -= charAktif.skilldmg;
+            }
+            UpdateSkillButtonUI();
+        }
+
+        private void timercdskillorulti_Tick(object sender, EventArgs e)
+        {
+            bool adaYangMasihCD = false;
+            foreach (Character c in partyterpilih)
+            {
+                if (c.currentskillcd > 0)
+                {
+                    c.currentskillcd--;
+                    adaYangMasihCD = true;
+                }
+                if(c.currentulticd> 0)
+                {
+                    c.currentulticd--;
+                    adaYangMasihCD = false;
+                }
+            }
+            UpdateSkillButtonUI();
+            UpdateUltiButtonUI();
+            if (!adaYangMasihCD)
+            {
+                timercdskillorulti.Stop();
+            }
+        }
+
+        private void buttonulti_Click(object sender, EventArgs e)
+        {
+            if (charAktif.currentulticd > 0)
+            {
+                return;
+            }
+            charAktif.currentulticd = charAktif.ulticd;
+            buttonulti.Text = $"Ulti \n {cdskill}";
+            timercdskillorulti.Start();
+
+            if (charAktif.role == "Main DPS")
+            {
+                healthbarboss.Value -= charAktif.ultidmg;
+            }
+            UpdateUltiButtonUI();
+        }
     }
 }

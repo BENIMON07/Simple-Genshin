@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             buttonskill = new Button();
             buttonulti = new Button();
             buttonbasicatk = new Button();
+            timercdgantichar = new System.Windows.Forms.Timer(components);
+            timercdskillorulti = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // buttonskill
@@ -42,6 +45,7 @@
             buttonskill.TabIndex = 0;
             buttonskill.Text = "SKILL";
             buttonskill.UseVisualStyleBackColor = true;
+            buttonskill.Click += buttonskill_Click;
             // 
             // buttonulti
             // 
@@ -52,6 +56,7 @@
             buttonulti.TabIndex = 1;
             buttonulti.Text = "ULTI";
             buttonulti.UseVisualStyleBackColor = true;
+            buttonulti.Click += buttonulti_Click;
             // 
             // buttonbasicatk
             // 
@@ -62,6 +67,17 @@
             buttonbasicatk.TabIndex = 2;
             buttonbasicatk.Text = "BASIC ATTACK";
             buttonbasicatk.UseVisualStyleBackColor = true;
+            buttonbasicatk.Click += buttonbasicatk_Click;
+            // 
+            // timercdgantichar
+            // 
+            timercdgantichar.Interval = 1000;
+            timercdgantichar.Tick += timercdgantichar_Tick;
+            // 
+            // timercdskillorulti
+            // 
+            timercdskillorulti.Interval = 1000;
+            timercdskillorulti.Tick += timercdskillorulti_Tick;
             // 
             // Form4
             // 
@@ -83,5 +99,7 @@
         private Button buttonskill;
         private Button buttonulti;
         private Button buttonbasicatk;
+        private System.Windows.Forms.Timer timercdgantichar;
+        private System.Windows.Forms.Timer timercdskillorulti;
     }
 }

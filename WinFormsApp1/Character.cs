@@ -25,7 +25,8 @@ namespace WinFormsApp1
         public int buffduration { get; set; }
         public int skillcd { get; set; }
         public int ulticd { get; set; }
-
+        public int currentskillcd { get; set; } = 0;
+        public int currentulticd { get; set; } = 0;
         public Image Avatar { get; set; }
     }
 }
