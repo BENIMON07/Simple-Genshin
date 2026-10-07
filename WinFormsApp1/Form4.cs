@@ -25,8 +25,8 @@ namespace WinFormsApp1
         ProgressBar healthbarcharaktif;
         Label lblHpCharAktif;
 
-        BindingList<PictureBox> fotocharkanan = new BindingList<PictureBox>();
-        BindingList<Label> labelnamacharkanan = new BindingList<Label>();
+        BindingList<PictureBox> listfotocharkanan = new BindingList<PictureBox>();
+        BindingList<Label> listlabelnamacharkanan = new BindingList<Label>();
 
         public Form4(BindingList<Character>partyteam,int index)
         {
@@ -146,6 +146,33 @@ namespace WinFormsApp1
             lblHpCharAktif.Location = new Point(780, 598);
             lblHpCharAktif.AutoSize = true;
             this.Controls.Add(lblHpCharAktif);
+
+            //pilihan char di kanan
+            int startY = 80;
+            for(int i=0; i<partyterpilih.Count; i++)
+            {
+                Character c = partyterpilih[i];
+                Label lbparty = new Label();
+                lbparty.Text = c.name;
+                lbparty.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                lbparty.ForeColor = Color.White;
+                lbparty.AutoSize = true;
+                lbparty.Location = new Point(1100, startY + (i * 60) + 15);
+                this.Controls.Add(lbparty);
+                listlabelnamacharkanan.Add(lbparty);
+
+                PictureBox fotoparty = new PictureBox();
+                fotoparty.Size = new Size(50, 50);
+                fotoparty.Location = new Point(1180, startY + (i * 60));
+                fotoparty.SizeMode = PictureBoxSizeMode.Zoom;
+                fotoparty.Image = c.Avatar;
+                fotoparty.Tag = c;
+                fotoparty.Cursor = Cursors.Hand;
+
+
+                this.Controls.Add(fotoparty);
+                listfotocharkanan.Add(fotoparty);
+            }
 
         }
 
