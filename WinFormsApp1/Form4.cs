@@ -13,6 +13,7 @@ namespace WinFormsApp1
         int cdGantiChar = 0;
         int cdskill = 0;
         int cdulti = 0;
+        int bosshitinterval = 0;
         Label labelcdgantichar;
         BindingList<Musuh> listmusuh = new BindingList<Musuh>();
         BindingList<Character> partyterpilih = new BindingList<Character>();
@@ -41,9 +42,12 @@ namespace WinFormsApp1
 
         private void Form4_Load(object sender, EventArgs e)
         {
+            
+            timerbosshit.Start();
             loaddatamusuh();
             bossaktif = listmusuh[indexbosdipilih];
             battleui();
+            bosshitinterval = bossaktif.intervalhit;
         }
         private void loaddatamusuh()
         {
@@ -338,8 +342,29 @@ namespace WinFormsApp1
             {
                 healthbarboss.Value -= charAktif.ultidmg;
             }
+
             UpdateUltiButtonUI();
             lblHpMusuhAktif_TextUpdate();
+        }
+        
+
+        private void timerbosshit_Tick(object sender, EventArgs e)
+        {
+            
+            if(bosshitinterval>0)
+            {
+                bosshitinterval--;        
+            }
+            if(bosshitinterval == 0)
+            {
+                charAktif.CurrentHP -= bossaktif.dmg;
+                bosshitinterval = bossaktif.intervalhit;
+                if (charAktif.CurrentHP < 0)
+                {
+                    charAktif.CurrentHP = 0;
+                }
+            }
+            UpdateCharAktifUI();
         }
     }
 }

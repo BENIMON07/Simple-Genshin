@@ -34,6 +34,7 @@
             buttonbasicatk = new Button();
             timercdgantichar = new System.Windows.Forms.Timer(components);
             timercdskillorulti = new System.Windows.Forms.Timer(components);
+            timerbosshit = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // buttonskill
@@ -79,6 +80,11 @@
             timercdskillorulti.Interval = 1000;
             timercdskillorulti.Tick += timercdskillorulti_Tick;
             // 
+            // timerbosshit
+            // 
+            timerbosshit.Interval = 1000;
+            timerbosshit.Tick += timerbosshit_Tick;
+            // 
             // Form4
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -101,5 +107,6 @@
         private Button buttonbasicatk;
         private System.Windows.Forms.Timer timercdgantichar;
         private System.Windows.Forms.Timer timercdskillorulti;
+        private System.Windows.Forms.Timer timerbosshit;
     }
 }
