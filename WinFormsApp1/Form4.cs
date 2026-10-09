@@ -5,11 +5,14 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Media;
 
 namespace WinFormsApp1
 {
     public partial class Form4 : Form
     {
+        SoundPlayer bgmPlayer;
+        
         int cdGantiChar = 0;
         int cdskill = 0;
         int cdulti = 0;
@@ -45,7 +48,8 @@ namespace WinFormsApp1
 
         private void Form4_Load(object sender, EventArgs e)
         {
-            
+            bgmPlayer = new SoundPlayer(Properties.Resources.genhsinbattle);
+            bgmPlayer.PlayLooping();
             timerbosshit.Start();
             loaddatamusuh();
             bossaktif = listmusuh[indexbosdipilih];
@@ -197,10 +201,10 @@ namespace WinFormsApp1
         private void lblHpMusuhAktif_TextUpdate()
         {
             labelnyawaboss.Text = $"{healthbarboss.Value} / {bossaktif.MaxHPmusuh}";
-        }
-        private void lblHpHpCharAktif_TextUpdate()
-        {
-            lblHpCharAktif.Text = $"{charAktif.CurrentHP} / {charAktif.MaxHP}";
+            if(healthbarboss.Value == 0)
+            {
+                
+            }
         }
         private void fotoparty_Click(object sender, EventArgs e)
         {
@@ -279,6 +283,7 @@ namespace WinFormsApp1
         private void buttonbasicatk_Click(object sender, EventArgs e)
         {
             healthbarboss.Value -= charAktif.BaseATK;
+            
             lblHpMusuhAktif_TextUpdate();
         }
 
@@ -382,6 +387,10 @@ namespace WinFormsApp1
             }
             else
             {
+                if (bgmPlayer != null)
+                {
+                    bgmPlayer.Stop();
+                }
                 timerbosshit.Stop();
                 timercdskillorulti.Stop();
                 timercdgantichar.Stop();
