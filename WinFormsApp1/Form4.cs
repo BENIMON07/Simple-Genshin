@@ -297,8 +297,31 @@ namespace WinFormsApp1
             {
                 healthbarboss.Value -= charAktif.skilldmg;
             }
+            if (charAktif.role == "Healer")
+            {
+                foreach(Character c in partyterpilih)
+                {
+                    if(c.CurrentHP < c.MaxHP)
+                    {
+                        if (c.CurrentHP == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            c.CurrentHP += charAktif.skillheal;
+                            if(c.CurrentHP >= c.MaxHP)
+                            {
+                                c.CurrentHP = c.MaxHP;
+                            }
+                        }
+                    }
+                    
+                }
+            }
             UpdateSkillButtonUI();
             lblHpMusuhAktif_TextUpdate();
+            UpdateCharAktifUI();
         }
 
         private void timercdskillorulti_Tick(object sender, EventArgs e)
