@@ -15,7 +15,9 @@ namespace WinFormsApp1
         int cdulti = 0;
         int bosshitinterval = 0;
         Label labelcdgantichar;
-        BindingList<Musuh> listmusuh = new BindingList<Musuh>();
+        ProgressBar pbshield;
+        Label shieldtext;
+        BindingList <Musuh> listmusuh = new BindingList<Musuh>();
         BindingList<Character> partyterpilih = new BindingList<Character>();
         Musuh bossaktif;
         int indexbosdipilih = 0;
@@ -29,6 +31,7 @@ namespace WinFormsApp1
         Label namacharaktif;
         ProgressBar healthbarcharaktif;
         Label lblHpCharAktif;
+        
 
         BindingList<PictureBox> listfotocharkanan = new BindingList<PictureBox>();
         BindingList<Label> listlabelnamacharkanan = new BindingList<Label>();
@@ -124,7 +127,7 @@ namespace WinFormsApp1
 
             labelnyawaboss = new Label();
             labelnyawaboss.ForeColor = Color.White;
-            labelnyawaboss.Text = $"{healthbarboss.Value}/{bossaktif.MaxHPmusuh}";
+            labelnyawaboss.Text = $"{healthbarboss.Value} / {bossaktif.MaxHPmusuh}";
             labelnyawaboss.Font = new Font("Segoe UI", 13, FontStyle.Bold);
             labelnyawaboss.Location = new Point(770, 80);
             labelnyawaboss.AutoSize = true;
@@ -149,7 +152,7 @@ namespace WinFormsApp1
 
             lblHpCharAktif = new Label();
             lblHpCharAktif.ForeColor = Color.White;
-            lblHpCharAktif.Text = $"{charAktif.CurrentHP}/{charAktif.MaxHP}";
+            lblHpCharAktif.Text = $"{charAktif.CurrentHP} / {charAktif.MaxHP}";
             lblHpCharAktif.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             lblHpCharAktif.Location = new Point(780, 598);
             lblHpCharAktif.AutoSize = true;
@@ -302,12 +305,33 @@ namespace WinFormsApp1
                 return;
             }
             charAktif.currentskillcd = charAktif.skillcd;
-            buttonskill.Text = $"Skill \n {cdskill}";
+            buttonskill.Text = $"SKILL \n {cdskill}";
             timercdskillorulti.Start();
 
             if (charAktif.role == "Main DPS")
             {
                 healthbarboss.Value -= charAktif.skilldmg;
+            }
+            if(charAktif.role == "Shielder")
+            {
+                shieldtext = new Label();
+                shieldtext.Text = "SHIELD";
+                shieldtext.ForeColor = Color.White;
+                shieldtext.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                shieldtext.Location = new Point(608, 540);
+                this.Controls.Add(shieldtext);
+
+                if(pbshield == null)
+                {
+                    pbshield = new ProgressBar();
+                    pbshield.Size = new Size(364, 10);
+                    pbshield.Location = new Point(457, 568);
+                    this.Controls.Add(pbshield);
+                }
+                
+                pbshield.Maximum = charAktif.skillshield;
+                pbshield.Value = charAktif.skillshield;
+                pbshield.Visible = true;
             }
             if (charAktif.role == "Healer")
             {
@@ -405,12 +429,34 @@ namespace WinFormsApp1
                 return;
             }
             charAktif.currentulticd = charAktif.ulticd;
-            buttonulti.Text = $"Ulti \n {cdskill}";
+            buttonulti.Text = $"ULTI \n {cdulti}";
             timercdskillorulti.Start();
 
             if (charAktif.role == "Main DPS")
             {
                 healthbarboss.Value -= charAktif.ultidmg;
+            }
+            if (charAktif.role == "Healer")
+            {
+                foreach (Character c in partyterpilih)
+                {
+                    if (c.CurrentHP < c.MaxHP)
+                    {
+                        if (c.CurrentHP == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            c.CurrentHP += charAktif.ultiheal;
+                            if (c.CurrentHP >= c.MaxHP)
+                            {
+                                c.CurrentHP = c.MaxHP;
+                            }
+                        }
+                    }
+
+                }
             }
 
             UpdateUltiButtonUI();
@@ -427,7 +473,19 @@ namespace WinFormsApp1
             }
             if(bosshitinterval == 0)
             {
-                charAktif.CurrentHP -= bossaktif.dmg;
+                if(pbshield != null && pbshield.Value > 0)
+                {
+                    pbshield.Value -= 1;
+                    if(pbshield.Value == 0)
+                    {
+                        shieldtext.Visible = false;
+                        pbshield.Visible = false;
+                    }
+                }
+                else
+                {
+                    charAktif.CurrentHP -= bossaktif.dmg;
+                }
                 bosshitinterval = bossaktif.intervalhit;
                 if (charAktif.CurrentHP < 0)
                 {

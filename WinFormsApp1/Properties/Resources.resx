@@ -193,4 +193,25 @@
   <data name="deadlogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\deadlogo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="fotoPyro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoPyro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoAnemo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoAnemo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoCryo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoCryo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoDendro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoDendro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoGeo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoGeo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoHydro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoHydro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fotoElectro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fotoElectro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
