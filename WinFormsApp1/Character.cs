@@ -28,5 +28,6 @@ namespace WinFormsApp1
         public int currentskillcd { get; set; } = 0;
         public int currentulticd { get; set; } = 0;
         public Image Avatar { get; set; }
+        
     }
 }

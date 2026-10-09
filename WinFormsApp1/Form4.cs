@@ -87,7 +87,7 @@ namespace WinFormsApp1
                 dmg = 400,
                 MaxHPmusuh = 25000,
                 CurrentHPmusuh = 25000,
-                intervalhit = 5,
+                intervalhit = 2,
                 reward = 5,
                 Avatarmusuh = Properties.Resources.theknaveicon
             });
@@ -229,6 +229,18 @@ namespace WinFormsApp1
             lblHpCharAktif.Text = $"{hpTampil} / {charAktif.MaxHP}";
             UpdateSkillButtonUI();
             UpdateUltiButtonUI();
+            foreach(PictureBox foto in listfotocharkanan)
+            {
+                Character c = (Character)foto.Tag;
+                if (c.CurrentHP <= 0)
+                {
+                    foto.Image = Properties.Resources.deadlogo;
+                }
+                else
+                {
+                    foto.Image = c.Avatar;
+                }
+            }
         }
         private void UpdateSkillButtonUI()
         {
@@ -324,6 +336,41 @@ namespace WinFormsApp1
             UpdateCharAktifUI();
         }
 
+        private void cekcharmati()
+        {
+            Character charpengganti = null;
+            if(charAktif.CurrentHP > 0)
+            {
+                return;
+            }
+            foreach(Character c in partyterpilih)
+            {
+                if(c.CurrentHP > 0)
+                {
+                    charpengganti = c;
+                    break;
+                }
+            }
+            if(charpengganti != null)
+            {
+                charAktif = charpengganti;
+                UpdateCharAktifUI();
+            }
+            else
+            {
+                timerbosshit.Stop();
+                timercdskillorulti.Stop();
+                timercdgantichar.Stop();
+                MessageBox.Show("AOWKWKWK KALAH");
+
+                Form2 balik = new Form2();
+                balik.Show();
+                this.Close();
+
+            }
+            
+        }
+
         private void timercdskillorulti_Tick(object sender, EventArgs e)
         {
             bool adaYangMasihCD = false;
@@ -388,6 +435,7 @@ namespace WinFormsApp1
                 }
             }
             UpdateCharAktifUI();
+            cekcharmati();
         }
     }
 }
