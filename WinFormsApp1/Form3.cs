@@ -25,29 +25,33 @@ namespace WinFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
             Form4 ingame = new Form4(partyPemain, 0);
-            ingame.Show();
             this.Hide();
+            ingame.ShowDialog();
+            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Form4 ingame = new Form4(partyPemain, 1);
-            ingame.Show();
             this.Hide();
+            ingame.ShowDialog();
+            this.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Form4 ingame = new Form4(partyPemain, 2);
-            ingame.Show();
             this.Hide();
+            ingame.ShowDialog();
+            this.Close();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Form4 ingame = new Form4(partyPemain, 3);
-            ingame.Show();
             this.Hide();
+            ingame.ShowDialog();
+            this.Close();
         }
 
         private void Form3_Load(object sender, EventArgs e)

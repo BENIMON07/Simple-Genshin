@@ -12,7 +12,7 @@ namespace WinFormsApp1
     public partial class Form4 : Form
     {
         SoundPlayer bgmPlayer;
-        
+        Image imgDead = Properties.Resources.deadlogo;
         int cdGantiChar = 0;
         int cdskill = 0;
         int cdulti = 0;
@@ -20,7 +20,7 @@ namespace WinFormsApp1
         Label labelcdgantichar;
         ProgressBar pbshield;
         Label shieldtext;
-        BindingList <Musuh> listmusuh = new BindingList<Musuh>();
+        BindingList<Musuh> listmusuh = new BindingList<Musuh>();
         BindingList<Character> partyterpilih = new BindingList<Character>();
         Musuh bossaktif;
         int indexbosdipilih = 0;
@@ -34,7 +34,7 @@ namespace WinFormsApp1
         Label namacharaktif;
         ProgressBar healthbarcharaktif;
         Label lblHpCharAktif;
-        
+
 
         BindingList<PictureBox> listfotocharkanan = new BindingList<PictureBox>();
         BindingList<Label> listlabelnamacharkanan = new BindingList<Label>();
@@ -48,6 +48,12 @@ namespace WinFormsApp1
 
         private void Form4_Load(object sender, EventArgs e)
         {
+            foreach (Character c in partyterpilih)
+            {
+                c.CurrentHP = c.MaxHP;
+                c.currentskillcd = 0;
+                c.currentulticd = 0;
+            }
             bgmPlayer = new SoundPlayer(Properties.Resources.genhsinbattle);
             bgmPlayer.PlayLooping();
             timerbosshit.Start();
@@ -55,6 +61,7 @@ namespace WinFormsApp1
             bossaktif = listmusuh[indexbosdipilih];
             battleui();
             bosshitinterval = bossaktif.intervalhit;
+            
         }
         private void loaddatamusuh()
         {
@@ -201,9 +208,15 @@ namespace WinFormsApp1
         private void lblHpMusuhAktif_TextUpdate()
         {
             labelnyawaboss.Text = $"{healthbarboss.Value} / {bossaktif.MaxHPmusuh}";
-            if(healthbarboss.Value == 0)
+            if (healthbarboss.Value <= 0)
             {
-                
+                healthbarboss.Value = 0;
+                timerbosshit.Stop();
+                timercdskillorulti.Stop();
+                timercdgantichar.Stop();
+                bgmPlayer.Stop();
+                MessageBox.Show("NICEE MENANG");
+                this.Close();
             }
         }
         private void fotoparty_Click(object sender, EventArgs e)
@@ -236,12 +249,12 @@ namespace WinFormsApp1
             lblHpCharAktif.Text = $"{hpTampil} / {charAktif.MaxHP}";
             UpdateSkillButtonUI();
             UpdateUltiButtonUI();
-            foreach(PictureBox foto in listfotocharkanan)
+            foreach (PictureBox foto in listfotocharkanan)
             {
                 Character c = (Character)foto.Tag;
                 if (c.CurrentHP <= 0)
                 {
-                    foto.Image = Properties.Resources.deadlogo;
+                    foto.Image = imgDead;
                 }
                 else
                 {
@@ -283,7 +296,11 @@ namespace WinFormsApp1
         private void buttonbasicatk_Click(object sender, EventArgs e)
         {
             healthbarboss.Value -= charAktif.BaseATK;
-            
+            if (healthbarboss.Value <= 0)
+            {
+                healthbarboss.Value = 0;
+            }
+
             lblHpMusuhAktif_TextUpdate();
         }
 
@@ -317,32 +334,34 @@ namespace WinFormsApp1
             {
                 healthbarboss.Value -= charAktif.skilldmg;
             }
-            if(charAktif.role == "Shielder")
+            if (charAktif.role == "Shielder")
             {
-                shieldtext = new Label();
-                shieldtext.Text = "SHIELD";
-                shieldtext.ForeColor = Color.White;
-                shieldtext.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-                shieldtext.Location = new Point(608, 540);
-                this.Controls.Add(shieldtext);
-
-                if(pbshield == null)
+                if (shieldtext == null)
+                {
+                    shieldtext = new Label();
+                    shieldtext.Text = "SHIELD";
+                    shieldtext.ForeColor = Color.White;
+                    shieldtext.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                    shieldtext.Location = new Point(608, 540);
+                    this.Controls.Add(shieldtext);
+                }
+                if (pbshield == null)
                 {
                     pbshield = new ProgressBar();
                     pbshield.Size = new Size(364, 10);
                     pbshield.Location = new Point(457, 568);
                     this.Controls.Add(pbshield);
                 }
-                
+
                 pbshield.Maximum = charAktif.skillshield;
                 pbshield.Value = charAktif.skillshield;
                 pbshield.Visible = true;
             }
             if (charAktif.role == "Healer")
             {
-                foreach(Character c in partyterpilih)
+                foreach (Character c in partyterpilih)
                 {
-                    if(c.CurrentHP < c.MaxHP)
+                    if (c.CurrentHP < c.MaxHP)
                     {
                         if (c.CurrentHP == 0)
                         {
@@ -351,13 +370,13 @@ namespace WinFormsApp1
                         else
                         {
                             c.CurrentHP += charAktif.skillheal;
-                            if(c.CurrentHP >= c.MaxHP)
+                            if (c.CurrentHP >= c.MaxHP)
                             {
                                 c.CurrentHP = c.MaxHP;
                             }
                         }
                     }
-                    
+
                 }
             }
             UpdateSkillButtonUI();
@@ -368,19 +387,19 @@ namespace WinFormsApp1
         private void cekcharmati()
         {
             Character charpengganti = null;
-            if(charAktif.CurrentHP > 0)
+            if (charAktif.CurrentHP > 0)
             {
                 return;
             }
-            foreach(Character c in partyterpilih)
+            foreach (Character c in partyterpilih)
             {
-                if(c.CurrentHP > 0)
+                if (c.CurrentHP > 0)
                 {
                     charpengganti = c;
                     break;
                 }
             }
-            if(charpengganti != null)
+            if (charpengganti != null)
             {
                 charAktif = charpengganti;
                 UpdateCharAktifUI();
@@ -394,14 +413,12 @@ namespace WinFormsApp1
                 timerbosshit.Stop();
                 timercdskillorulti.Stop();
                 timercdgantichar.Stop();
+                bgmPlayer.Stop();
                 MessageBox.Show("AOWKWKWK KALAH");
-
-                Form2 balik = new Form2();
-                balik.Show();
                 this.Close();
 
             }
-            
+
         }
 
         private void timercdskillorulti_Tick(object sender, EventArgs e)
@@ -471,21 +488,21 @@ namespace WinFormsApp1
             UpdateUltiButtonUI();
             lblHpMusuhAktif_TextUpdate();
         }
-        
+
 
         private void timerbosshit_Tick(object sender, EventArgs e)
         {
-            
-            if(bosshitinterval>0)
+
+            if (bosshitinterval > 0)
             {
-                bosshitinterval--;        
+                bosshitinterval--;
             }
-            if(bosshitinterval == 0)
+            if (bosshitinterval == 0)
             {
-                if(pbshield != null && pbshield.Value > 0)
+                if (pbshield != null && pbshield.Value > 0)
                 {
                     pbshield.Value -= 1;
-                    if(pbshield.Value == 0)
+                    if (pbshield.Value == 0)
                     {
                         shieldtext.Visible = false;
                         pbshield.Visible = false;
@@ -503,6 +520,23 @@ namespace WinFormsApp1
             }
             UpdateCharAktifUI();
             cekcharmati();
+        }
+
+        private void Form4_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            timerbosshit.Stop();
+            timercdskillorulti.Stop();
+            timercdgantichar.Stop();
+
+            if (bgmPlayer != null)
+            {
+                bgmPlayer.Stop();
+                bgmPlayer.Dispose();
+                bgmPlayer = null;
+            }
+            this.Controls.Clear();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

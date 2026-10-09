@@ -477,15 +477,17 @@ namespace WinFormsApp1
                 if (pesan == DialogResult.Yes)
                 {
                     Form3 pilihmusuh = new Form3(partydipilih);
-                    pilihmusuh.Show();
                     this.Hide();
+                    pilihmusuh.ShowDialog();
+                    this.Show();
                 }
             }
             else
             {
                 Form3 pilihmusuh = new Form3(partydipilih);
-                pilihmusuh.Show();
                 this.Hide();
+                pilihmusuh.ShowDialog();
+                this.Show();
             }
             
         }
