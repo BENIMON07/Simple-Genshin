@@ -352,7 +352,7 @@ namespace WinFormsApp1
                     pbshield.Location = new Point(457, 568);
                     this.Controls.Add(pbshield);
                 }
-
+                shieldtext.Visible = true;
                 pbshield.Maximum = charAktif.skillshield;
                 pbshield.Value = charAktif.skillshield;
                 pbshield.Visible = true;
@@ -462,6 +462,29 @@ namespace WinFormsApp1
             {
                 healthbarboss.Value -= charAktif.ultidmg;
             }
+            if (charAktif.role == "Shielder")
+            {
+                if (shieldtext == null)
+                {
+                    shieldtext = new Label();
+                    shieldtext.Text = "SHIELD";
+                    shieldtext.ForeColor = Color.White;
+                    shieldtext.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                    shieldtext.Location = new Point(608, 540);
+                    this.Controls.Add(shieldtext);
+                }
+                if (pbshield == null)
+                {
+                    pbshield = new ProgressBar();
+                    pbshield.Size = new Size(364, 10);
+                    pbshield.Location = new Point(457, 568);
+                    this.Controls.Add(pbshield);
+                }
+                shieldtext.Visible = true;
+                pbshield.Maximum = charAktif.ultishield;
+                pbshield.Value = charAktif.ultishield;
+                pbshield.Visible = true;
+            }
             if (charAktif.role == "Healer")
             {
                 foreach (Character c in partyterpilih)
@@ -504,7 +527,10 @@ namespace WinFormsApp1
                     pbshield.Value -= 1;
                     if (pbshield.Value == 0)
                     {
-                        shieldtext.Visible = false;
+                        if (shieldtext != null)
+                        {
+                            shieldtext.Visible = false;
+                        }
                         pbshield.Visible = false;
                     }
                 }
